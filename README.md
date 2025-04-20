@@ -41,7 +41,7 @@ Menambahkan 5 warna lainnya sesuai keinginan anda pada variabel colors
 Jelaskan fungsi keyword yield\* pada kode tersebut
 
 ```dart
-yield* Stream.periodic(const Duration(seconds: 1), (int t)
+yield* Stream.periodic(const Duration(seconds: 1), (int t))
 ```
 
 #### Penjelasan
