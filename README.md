@@ -71,3 +71,44 @@ Kode ini membuat sebuah stream yang :
 #### Demo
 
 <img src="img/soal4.gif" alt="Capture no 4" width="300">
+
+### Soal no 5
+
+Jelaskan perbedaan menggunakan listen dan await for (langkah 9) !
+
+Kedua pendekatan yang anda tunjukkan digunakan untuk mengonsumsi nilai dari stream, tetapi memiliki perbedaan mendasar dalam cara kerja dan penggunaannya :
+
+```dart
+await for (var eventColor in colorStream.getColors()) {
+    setState(() {
+        bgColor = eventColor;
+    });
+}
+```
+
+#### Penjelasan
+
+- Menggunakan sintaks async/await yang membutuhkan fungsi yang diawali dengan async
+- Memblokir eksekusi fungsi saat ini sampai stream selesai
+- Kode setelah loop await for tidak akan dijalankan sampai stream berakhir
+- Lebih mudah dibaca dan mirip dengan sintaks loop pada umumnya
+
+```dart
+colorStream.getColors().listen((eventColor) {
+    setState(() {
+        bgColor = eventColor;
+    });
+});
+```
+
+#### Penjelasan
+
+- Menggunakan pendekatan callback
+- Non-blocking - eksekusi fungsi terus berlanjut setelah memanggil listen()
+- Callback dijalankan setiap kali ada event baru dari stream
+- Memberikan lebih banyak kontrol (bisa menambahkan handler untuk error, completion, dsb)
+
+#### Kesimpulan
+
+- Await For tidak ideal untuk stream tak terbatas seperti yang dihasilkan oleh getColors() karena akan memblokir eksekusi fungsi selamanya.
+- Listen tidak memblokir eksekusi fungsi, memungkinkan UI untuk tetap responsive dan cocok untuk stream yang terus menghasilkan nilai tanpa batas waktu
