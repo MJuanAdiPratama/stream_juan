@@ -112,3 +112,56 @@ colorStream.getColors().listen((eventColor) {
 
 - Await For tidak ideal untuk stream tak terbatas seperti yang dihasilkan oleh getColors() karena akan memblokir eksekusi fungsi selamanya.
 - Listen tidak memblokir eksekusi fungsi, memungkinkan UI untuk tetap responsive dan cocok untuk stream yang terus menghasilkan nilai tanpa batas waktu
+
+### Soal no 6
+
+Jelaskan maksud kode langkah 8 dan 10 tersebut!
+
+```dart
+// Langkah 8
+  @override
+  void initState() {
+    numberStream = NumberStream();
+    numberStreamController = numberStream.controller;
+    Stream stream = numberStreamController.stream;
+    stream.listen((event) {
+      setState(() {
+        lastNumber = event;
+      });
+    });
+    super.initState();
+  }
+```
+
+#### Penjelasan
+
+1. Inisialisasi NumberStream: Membuat instance dari kelas NumberStream (yang sudah didefinisikan di stream.dart).
+
+2. Akses StreamController: Mengambil referensi controller dari numberStream dan menyimpannya dalam variabel NumberStreamController.
+
+3. Mendapatkan Stream: Mengakses stream dari controller, yang merupakan aliran data yang akan digunakan untuk menerima nilai.
+
+4. Listen Stream: Memasang listener pada stream menggunakan listen(). Setiap ada data baru di stream akan callback function yang dipanggil dengan nilai baru (event), Memanggil setState() untuk memperbarui UI, dan menyimpan nilai baru ke dalam lastNumber.
+
+5. Memanggil super.initState(): Menjalankan implementasi initState() dari kelas induk.
+
+```dart
+// Langkah 10
+  void addRandomNumber() {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    numberStream.addNumberToSink(myNum);
+  }
+```
+
+#### Penjelasan
+
+1. Membuat Random Object: Membuat instance dari Random untuk menghasilkan angka acak.
+
+2. Menghasilkan Angka Acak: Menggunakan random.nextInt(10) untuk mendapatkan angka acak antara 0-9.
+
+3. Menambahkan ke Stream: Memanggil method addNumberToSink() dari numberStream dengan angka acak yang dihasilkan.
+
+#### Demo
+
+<img src="img/soal6.gif" alt="Capture no 6" width="300">
