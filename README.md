@@ -165,3 +165,40 @@ Jelaskan maksud kode langkah 8 dan 10 tersebut!
 #### Demo
 
 <img src="img/soal6.gif" alt="Capture no 6" width="300">
+
+### Soal no 7
+
+Jelaskan maksud kode langkah 13 sampai 15 tersebut!
+
+```dart
+// Langkah 13
+ addError() {
+    controller.sink.addError('error');
+  }
+```
+
+#### Penjelasan
+
+Method ini digunakan untuk menambahkan error ke dalam stream melalui sink
+
+1. controller.sink.addError() untuk memasukkan sebuah error ke dalam stream, listener yang mendengarkan stream akan menerima error ini dan dapat menanganinya menggunakan callback onError.
+
+2. efek nya ketika error ditambahkan ke stream, listener akan memicu callback onError.
+
+```dart
+// Langkah 15
+  void addRandomNumber() {
+    Random random = Random();
+    // int myNum = random.nextInt(10);
+    // numberStream.addNumberToSink(myNum);
+    numberStream.addError();
+  }
+```
+
+#### Penjelasan
+
+Method ini awalnya dirancang untuk menambahkan angka acak ke stream, tetapi saat ini hanya memanggil method addError() dari numberStream.
+
+1. numberStream.addError() untuk memanggil method addError() yang sudah didefinisikan di langkah 13, dan menambahkan error ke stream alih-alih angka acak.
+
+2. efeknya listener pada stream akan menerima error, dan callback onError akan dipanggil.
