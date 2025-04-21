@@ -202,3 +202,81 @@ Method ini awalnya dirancang untuk menambahkan angka acak ke stream, tetapi saat
 1. numberStream.addError() untuk memanggil method addError() yang sudah didefinisikan di langkah 13, dan menambahkan error ke stream alih-alih angka acak.
 
 2. efeknya listener pada stream akan menerima error, dan callback onError akan dipanggil.
+
+### Soal no 8
+
+Jelaskan maksud kode langkah 1-3 tersebut!
+
+```dart
+// langkah 1
+  late StreamTransformer transformer;
+```
+
+#### Penjelasan
+
+- Membuat instance baru dari kelas NumberStream
+- Mengambil controller dari instance tersebut dan menyimpannya di variabel numberStreamController
+- Mendapatkan stream dari controller dan menyimpannya di variabel lokal stream
+
+```dart
+// langkah 2
+    transformer = StreamTransformer<int, int>.fromHandlers(
+      handleData: (value, sink) {
+        sink.add(value * 10);
+      },
+      handleError: (error, trace, sink) {
+        sink.add(-1);
+      },
+      handleDone: (sink) => sink.close()
+    );
+```
+
+#### Penjelasan
+
+- Handler data:
+
+  - handleData adalah fungsi yang dijalankan ketika ada data baru di stream
+  - Parameter value adalah nilai asli dari stream (angka acak 0-9)
+  - Parameter sink adalah tempat memasukkan data hasil transformasi
+  - sink.add(value \* 10) mengalikan nilai asli dengan 10 dan mengirimkannya ke downstream
+
+- Handler error:
+
+  - handleError dijalankan ketika terjadi error di stream
+  - Alih-alih meneruskan error, transformer ini mengirim nilai tetap -1
+  - Ini membuat aplikasi tetap berjalan meski ada error
+
+- Handler done:
+
+  - handleDone dijalankan ketika stream sumber selesai
+  - Fungsinya menutup sink untuk menandakan bahwa transformasi juga selesai
+
+  ```dart
+  // langkah 3
+    stream.transform(transformer).listen((event) {
+          setState(() {
+            lastNumber = event;
+          });
+        })
+        .onError((error) {
+          setState(() {
+            lastNumber = -1;
+          });
+        });
+  ```
+
+  #### Penjelasan
+
+- Menerapkan transformer yang telah didefinisikan sebelumnya pada stream
+- Mendengarkan (listen) stream yang telah ditransformasi
+- Ketika ada event baru:
+- Memperbarui state dengan nilai event tersebut (yang sudah dikalikan 10 oleh transformer)
+- Menampilkan nilai tersebut ke UI melalui variabel lastNumber
+- Ketika terjadi error:
+- Menangkap error melalui handler onError
+- Mengatur nilai lastNumber menjadi -1
+- Memperbarui UI untuk menampilkan nilai tersebut
+
+#### Demo
+
+<img src="img/soal8.gif" alt="Capture no 8" width="300">
