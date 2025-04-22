@@ -280,3 +280,63 @@ Jelaskan maksud kode langkah 1-3 tersebut!
 #### Demo
 
 <img src="img/soal8.gif" alt="Capture no 8" width="300">
+
+### Soal no 9
+
+Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!
+
+```dart
+// langkah 2
+  late StreamSubscription subscription;
+```
+
+#### Penjelasan
+
+- StreamSubscription adalah objek yang merepresentasikan langganan (subscription) ke sebuah stream
+- Deklarasi ini memungkinkan untuk menyimpan referensi ke subscription yang akan dibuat saat listen stream
+- Penanda late menunjukkan bahwa variabel akan diinisialisasi sebelum digunakan, tapi tidak saat dideklarasikan
+- Dengan menyimpan subscription, kita bisa melakukan operasi seperti pause, resume, atau cancel pada langganan stream
+
+```dart
+// langkah 6
+  @override
+  void dispose() {
+    subscription.cancel();
+    numberStreamController.close();
+    super.dispose();
+  }
+```
+
+#### Penjelasan
+
+- Method dispose() dipanggil saat widget dihapus dari tree
+- subscription.cancel() membatalkan langganan ke stream, mencegah memory leak numberStream.close() menutup stream dan controller-nya, membebaskan resource
+- super.dispose() memanggil method dispose pada kelas induk (State)
+- Langkah ini sangat penting untuk menghindari kebocoran memori (memory leak) ketika widget tidak lagi digunakan
+
+```dart
+// langkah 8
+  void addRandomNumber() {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    if (!numberStreamController.isClosed) {
+      numberStream.addNumberToSink(myNum);
+    } else {
+      setState(() {
+        lastNumber = -1;
+      });
+    }
+  }
+```
+
+#### Penjelasan
+
+- Method ini menghasilkan angka acak antara 0-9 menggunakan Random().nextInt(10)
+- Sebelum menambahkan angka ke stream, dilakukan pengecekan apakah stream masih aktif dengan !numberStreamController.isClosed
+- Jika stream masih terbuka, angka acak ditambahkan ke stream menggunakan numberStream.addNumberToSink(myNum)
+- Jika stream sudah ditutup, UI diperbarui dengan nilai -1 sebagai indikator bahwa stream tidak lagi aktif
+- Pengecekan ini mencegah error "Bad state: Cannot add event after closing" yang terjadi jika mencoba menambahkan data ke stream yang sudah ditutup
+
+#### Demo
+
+<img src="img/soal9.gif" alt="Capture no 9" width="300">
