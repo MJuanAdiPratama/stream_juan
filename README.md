@@ -340,3 +340,27 @@ Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!
 #### Demo
 
 <img src="img/soal9.gif" alt="Capture no 9" width="300">
+
+### Soal no 10
+
+```dart
+    subscription = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
+
+    subscription2 = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
+```
+
+**Mengapa Error Ini Terjadi**
+Secara default, stream di Dart adalah "single-subscription", yang artinya:
+
+1. Stream hanya dapat memiliki satu listener pada satu waktu
+2. Setelah stream dilistener (dengan stream.listen()), stream tersebut tidak dapat dilistener lagi
+
+Ketika mencoba menambahkan listener kedua pada subscription2, Dart melempar error karena stream sudah didengarkan oleh subscription.
